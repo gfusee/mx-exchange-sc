@@ -11,13 +11,16 @@ path = "src/lib.rs"
 path = "../common/modules/pausable"
 
 [dependencies.multiversx-sc]
-version = "=0.43.3"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"
 features = ["esdt-token-payment-legacy-decode"]
 
 [dependencies.multiversx-sc-modules]
-version = "=0.43.3"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"
 [dev-dependencies.multiversx-sc-scenario]
-version = "=0.43.3"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"
 
 [dev-dependencies.farm]
 path = "../dex/farm"

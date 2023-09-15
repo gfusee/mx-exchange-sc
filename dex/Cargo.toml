@@ -4,7 +4,8 @@ version = "0.0.0"
 edition = "2021"
 publish = false
 [dependencies.multiversx-sc]
-version = "=0.43.3"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"
 features = ["esdt-token-payment-legacy-decode"]
 
 [dev-dependencies]
@@ -14,7 +15,8 @@ num-bigint = "0.4.2"
 version = "=0.43.3"
 
 [dev-dependencies.multiversx-sc-scenario]
-version = "=0.43.3"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"
 
 [dev-dependencies.config]
 path = "../common/modules/farm/config"

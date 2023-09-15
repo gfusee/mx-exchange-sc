@@ -8,4 +8,5 @@ authors = ["Dorin Iancu <dorin.iancu@multiversx.com>"]
 path = ".."
 
 [dependencies.multiversx-sc-meta]
-version = "0.43.2"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"

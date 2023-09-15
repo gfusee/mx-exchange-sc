@@ -44,11 +44,13 @@ path = "../../common/traits/mergeable"
 path = "../../common/traits/fixed-supply-token"
 
 [dependencies.multiversx-sc]
-version = "=0.43.3"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"
 features = ["esdt-token-payment-legacy-decode"]
 
 [dependencies.multiversx-sc-modules]
-version = "=0.43.3"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"
 
 [dependencies.energy-factory]
 path = "../energy-factory"
@@ -65,7 +67,8 @@ num-traits = "0.2"
 hex = "0.4"
 
 [dev-dependencies.multiversx-sc-scenario]
-version = "=0.43.3"
+git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
+branch = "feature/typed_sc_deploy_as_mut"
 
 [dev-dependencies.pausable]
 path = "../../common/modules/pausable"
