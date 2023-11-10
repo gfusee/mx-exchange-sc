@@ -12,7 +12,7 @@ features = ["esdt-token-payment-legacy-decode"]
 num-bigint = "0.4.2"
 
 [dev-dependencies.multiversx-sc-modules]
-version = "=0.43.3"
+version = "=0.43.2"
 
 [dev-dependencies.multiversx-sc-scenario]
 git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"

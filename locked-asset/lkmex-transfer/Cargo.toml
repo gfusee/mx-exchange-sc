@@ -41,4 +41,4 @@ git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
 branch = "feature/typed_sc_deploy_as_mut"
 
 [dev-dependencies.multiversx-sc-modules]
-version = "=0.43.3"
+version = "=0.43.2"

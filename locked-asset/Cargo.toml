@@ -50,7 +50,7 @@ num-traits = "0.2"
 hex = "0.4"
 
 [dev-dependencies.multiversx-sc-modules]
-version = "=0.43.3"
+version = "=0.43.2"
 
 [dev-dependencies.multiversx-sc-scenario]
 git = "ssh://git@github.com/gfusee/mx-sdk-rs.git"
