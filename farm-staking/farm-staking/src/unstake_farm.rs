@@ -39,7 +39,7 @@ pub trait UnstakeFarmModule:
     ) -> ExitFarmWithPartialPosResultType<Self::Api> {
         let caller = self.blockchain().get_caller();
         let original_caller = self.get_orig_caller_from_opt(&caller, opt_original_caller);
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
 
         self.unstake_farm_common(original_caller, payment, None)
     }
@@ -63,7 +63,7 @@ pub trait UnstakeFarmModule:
             "Invalid staking token received"
         );
 
-        self.unstake_farm_common(original_caller, second_payment, Some(first_payment.amount))
+        self.unstake_farm_common(original_caller, second_payment.clone(), Some(first_payment.amount.clone()))
     }
 
     fn unstake_farm_common(

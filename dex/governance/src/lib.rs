@@ -55,7 +55,7 @@ pub trait Governance:
     #[payable("*")]
     #[endpoint]
     fn propose(&self, args: ProposalCreationArgs<Self::Api>) -> u64 {
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         self.require_is_accepted_payment(&payment);
 
         let vote_weight = self.get_vote_weight(&payment);
@@ -77,7 +77,7 @@ pub trait Governance:
         self.send_back(vote_nft);
 
         let proposal_id = proposal.id;
-        self.emit_propose_event(proposal, payment, vote_weight);
+        self.emit_propose_event(proposal, payment.clone(), vote_weight);
 
         proposal_id
     }
@@ -116,7 +116,7 @@ pub trait Governance:
         let pstat = self.get_proposal_status(&proposal);
         require!(pstat == ProposalStatus::Active, PROPOSAL_NOT_ACTIVE);
 
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         self.require_is_accepted_payment(&payment);
 
         let vote_weight = self.get_vote_weight(&payment);
@@ -136,13 +136,13 @@ pub trait Governance:
         self.send_back(vote_nft);
 
         self.proposal(proposal_id).set(&proposal);
-        self.emit_vote_event(proposal, vote_type, payment, vote_weight);
+        self.emit_vote_event(proposal, vote_type, payment.clone(), vote_weight);
     }
 
     #[payable("*")]
     #[endpoint]
     fn redeem(&self) {
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
 
         let vote_nft_id = self.vote_nft_id().get();
         require!(payment.token_identifier == vote_nft_id, BAD_PAYMENT_TOKEN);
@@ -161,6 +161,6 @@ pub trait Governance:
             }
         }
 
-        self.emit_redeem_event(proposal, payment, attr);
+        self.emit_redeem_event(proposal, payment.clone(), attr);
     }
 }

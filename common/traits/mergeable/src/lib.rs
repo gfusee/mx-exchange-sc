@@ -1,5 +1,4 @@
 #![no_std]
-
 multiversx_sc::imports!();
 
 pub static CANNOT_MERGE_ERR_MSG: &[u8] = b"Cannot merge";
@@ -20,7 +19,7 @@ pub trait Mergeable<M: ManagedTypeApi> {
     where
         Self: Sized + ManagedVecItem,
     {
-        for item in &others {
+        for item in others {
             self.merge_with(item);
         }
     }

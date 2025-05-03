@@ -24,7 +24,7 @@ pub trait CancelUnstakeModule:
         let user_entries = entries_mapper.get();
         require!(!user_entries.is_empty(), "No tokens to unbond");
 
-        for entry in &user_entries {
+        for entry in user_entries {
             let locked_tokens = entry.locked_tokens;
             let attributes: LockedTokenAttributes<Self::Api> = self
                 .blockchain()

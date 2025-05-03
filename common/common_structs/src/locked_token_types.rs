@@ -7,12 +7,12 @@ pub const MAX_MILESTONES_IN_SCHEDULE: usize = 64;
 pub const PERCENTAGE_TOTAL_EX: u64 = 100_000u64;
 pub const PRECISION_EX_INCREASE: u64 = 1_000u64; // From 1 to 1_000;
 
+#[type_abi]
 #[derive(
     ManagedVecItem,
     TopEncode,
     TopDecode,
     PartialEq,
-    TypeAbi,
     NestedEncode,
     NestedDecode,
     Clone,
@@ -24,12 +24,12 @@ pub struct UnlockMilestone {
     pub unlock_percent: u8,
 }
 
+#[type_abi]
 #[derive(
     ManagedVecItem,
     TopEncode,
     TopDecode,
     PartialEq,
-    TypeAbi,
     NestedEncode,
     NestedDecode,
     Clone,
@@ -41,8 +41,9 @@ pub struct UnlockMilestoneEx {
     pub unlock_percent: u64,
 }
 
+#[type_abi]
 #[derive(
-    TopEncode, TopDecode, NestedEncode, NestedDecode, Clone, ManagedVecItem, TypeAbi, Debug,
+    TopEncode, TopDecode, NestedEncode, NestedDecode, Clone, ManagedVecItem, Debug,
 )]
 pub struct UnlockSchedule<M: ManagedTypeApi> {
     pub unlock_milestones: ManagedVec<M, UnlockMilestone>,
@@ -54,6 +55,7 @@ impl<M: ManagedTypeApi> UnlockSchedule<M> {
     }
 }
 
+#[type_abi]
 #[derive(
     TopEncode,
     TopDecode,
@@ -61,7 +63,6 @@ impl<M: ManagedTypeApi> UnlockSchedule<M> {
     NestedDecode,
     Clone,
     ManagedVecItem,
-    TypeAbi,
     PartialEq,
     Debug,
 )]
@@ -116,31 +117,32 @@ impl<M: ManagedTypeApi> UnlockScheduleEx<M> {
         let leftover_percent = PERCENTAGE_TOTAL_EX - new_total;
         if leftover_percent > 0 {
             let last_milestone_index = reallocated_milestones.len() - 1;
-            let mut last_milestone = reallocated_milestones.get(last_milestone_index);
+            let mut last_milestone = reallocated_milestones.get(last_milestone_index).clone();
             last_milestone.unlock_percent += leftover_percent;
 
-            let _ = reallocated_milestones.set(last_milestone_index, &last_milestone);
+            let _ = reallocated_milestones.set(last_milestone_index, last_milestone);
         }
 
         self.unlock_milestones = reallocated_milestones;
     }
 }
 
+#[type_abi]
 #[derive(
-    ManagedVecItem, TopEncode, TopDecode, NestedEncode, NestedDecode, TypeAbi, Clone, Debug,
+    ManagedVecItem, TopEncode, TopDecode, NestedEncode, NestedDecode, Clone, Debug,
 )]
 pub struct LockedAssetTokenAttributes<M: ManagedTypeApi> {
     pub unlock_schedule: UnlockSchedule<M>,
     pub is_merged: bool,
 }
 
+#[type_abi]
 #[derive(
     ManagedVecItem,
     TopEncode,
     TopDecode,
     NestedEncode,
     NestedDecode,
-    TypeAbi,
     Clone,
     PartialEq,
     Debug,
@@ -153,7 +155,7 @@ pub struct LockedAssetTokenAttributesEx<M: ManagedTypeApi> {
 impl<M: ManagedTypeApi> LockedAssetTokenAttributes<M> {
     pub fn migrate_to_new_attributes(&self) -> LockedAssetTokenAttributesEx<M> {
         let mut updated_unlock_milestones: ManagedVec<M, UnlockMilestoneEx> = ManagedVec::new();
-        for unlock_milestone in self.unlock_schedule.unlock_milestones.into_iter() {
+        for unlock_milestone in self.unlock_schedule.unlock_milestones.clone().into_iter() {
             let updated_milestone = UnlockMilestoneEx {
                 unlock_epoch: unlock_milestone.unlock_epoch,
                 unlock_percent: unlock_milestone.unlock_percent as u64 * PRECISION_EX_INCREASE,
@@ -206,7 +208,8 @@ impl<M: ManagedTypeApi> LockedAssetTokenAttributesEx<M> {
     }
 }
 
-#[derive(TypeAbi, TopEncode, TopDecode)]
+#[type_abi]
+#[derive(TopEncode, TopDecode)]
 pub struct UnlockEpochAmountPairs<M: ManagedTypeApi> {
     pub pairs: ArrayVec<EpochAmountPair<M>, MAX_MILESTONES_IN_SCHEDULE>,
 }

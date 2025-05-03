@@ -3,15 +3,17 @@ multiversx_sc::derive_imports!();
 
 use crate::{error_messages::*, proxy_lp::LpProxyTokenAttributes};
 
+#[type_abi]
 #[derive(
-    TypeAbi, TopEncode, TopDecode, NestedEncode, NestedDecode, PartialEq, Debug, Clone, Copy,
+    TopEncode, TopDecode, NestedEncode, NestedDecode, PartialEq, Debug, Clone, Copy,
 )]
 pub enum FarmType {
     SimpleFarm,
     FarmWithLockedRewards,
 }
 
-#[derive(TypeAbi, TopEncode, TopDecode, NestedEncode, NestedDecode, PartialEq, Debug)]
+#[type_abi]
+#[derive(TopEncode, TopDecode, NestedEncode, NestedDecode, PartialEq, Debug)]
 pub struct FarmProxyTokenAttributes<M: ManagedTypeApi> {
     pub farm_type: FarmType,
     pub farm_token_id: TokenIdentifier<M>,
@@ -44,7 +46,7 @@ pub trait ProxyFarmModule:
         token_ticker: ManagedBuffer,
         num_decimals: usize,
     ) {
-        let payment_amount = self.call_value().egld_value().clone_value();
+        let payment_amount = self.call_value().egld().clone_value();
 
         self.farm_proxy_token().issue_and_set_all_roles(
             EsdtTokenType::Meta,
@@ -120,7 +122,7 @@ pub trait ProxyFarmModule:
             self.call_value().all_esdt_transfers().clone_value();
         require!(!payments.is_empty(), NO_PAYMENT_ERR_MSG);
 
-        let proxy_lp_payment: EsdtTokenPayment<Self::Api> = payments.get(0);
+        let proxy_lp_payment: EsdtTokenPayment<Self::Api> = payments.get(0).clone();
         let lp_proxy_token_mapper = self.lp_proxy_token();
         lp_proxy_token_mapper.require_same_token(&proxy_lp_payment.token_identifier);
 
@@ -130,7 +132,7 @@ pub trait ProxyFarmModule:
         let farm_proxy_token_mapper = self.farm_proxy_token();
         let additional_proxy_farm_tokens = payments.slice(1, payments.len()).unwrap_or_default();
         let mut additional_farm_payments = ManagedVec::new();
-        for p in &additional_proxy_farm_tokens {
+        for p in additional_proxy_farm_tokens {
             let proxy_farm_attributes: FarmProxyTokenAttributes<Self::Api> =
                 farm_proxy_token_mapper.get_token_attributes(p.token_nonce);
 
@@ -200,7 +202,7 @@ pub trait ProxyFarmModule:
     #[payable("*")]
     #[endpoint(exitFarmLockedToken)]
     fn exit_farm_locked_token(&self) -> ExitFarmThroughProxyResultType<Self::Api> {
-        let payment: EsdtTokenPayment<Self::Api> = self.call_value().single_esdt();
+        let payment: EsdtTokenPayment<Self::Api> = self.call_value().single_esdt().clone();
 
         let farm_proxy_token_attributes: FarmProxyTokenAttributes<Self::Api> =
             self.validate_payment_and_get_farm_proxy_token_attributes(&payment);
@@ -269,7 +271,7 @@ pub trait ProxyFarmModule:
     #[payable("*")]
     #[endpoint(farmClaimRewardsLockedToken)]
     fn farm_claim_rewards_locked_token(&self) -> FarmClaimRewardsThroughProxyResultType<Self::Api> {
-        let payment: EsdtTokenPayment<Self::Api> = self.call_value().single_esdt();
+        let payment: EsdtTokenPayment<Self::Api> = self.call_value().single_esdt().clone();
         let mut farm_proxy_token_attributes: FarmProxyTokenAttributes<Self::Api> =
             self.validate_payment_and_get_farm_proxy_token_attributes(&payment);
 

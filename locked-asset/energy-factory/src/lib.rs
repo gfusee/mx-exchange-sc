@@ -117,7 +117,7 @@ pub trait SimpleLockEnergy:
         self.require_not_paused();
         self.require_is_listed_lock_option(lock_epochs);
 
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         let dest_address = self.dest_from_optional(opt_destination);
         let current_epoch = self.blockchain().get_block_epoch();
         let unlock_epoch = self.unlock_epoch_to_start_of_month(current_epoch + lock_epochs);
@@ -127,7 +127,7 @@ pub trait SimpleLockEnergy:
         );
 
         let output_tokens =
-            self.lock_by_token_type(&dest_address, payment, unlock_epoch, current_epoch);
+            self.lock_by_token_type(&dest_address, payment.clone(), unlock_epoch, current_epoch);
 
         self.send().direct_esdt(
             &dest_address,
@@ -164,7 +164,7 @@ pub trait SimpleLockEnergy:
                 let attributes: LockedTokenAttributes<Self::Api> =
                     locked_token_mapper.get_token_attributes(payment.token_nonce);
 
-                let unlocked_tokens = self.unlock_tokens(payment);
+                let unlocked_tokens = self.unlock_tokens(payment.clone());
                 energy.refund_after_token_unlock(
                     &unlocked_tokens.amount,
                     attributes.unlock_epoch,
@@ -200,7 +200,7 @@ pub trait SimpleLockEnergy:
             "May not call this endpoint. Use lockTokens instead"
         );
 
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         self.locked_token()
             .require_same_token(&payment.token_identifier);
 

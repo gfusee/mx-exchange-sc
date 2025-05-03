@@ -11,13 +11,13 @@ use crate::{
     wrapped_lp_attributes::{merge_wrapped_lp_tokens, WrappedLpToken},
 };
 
+#[type_abi]
 #[derive(
     ManagedVecItem,
     TopEncode,
     TopDecode,
     NestedEncode,
     NestedDecode,
-    TypeAbi,
     Clone,
     PartialEq,
     Debug,
@@ -77,7 +77,7 @@ impl<M: ManagedTypeApi + StorageMapperApi + CallTypeApi> WrappedFarmToken<M> {
             let attributes: WrappedFarmTokenAttributes<M> =
                 wrapped_token_mapper.get_token_attributes(payment.token_nonce);
             let wrapped_farm_token = WrappedFarmToken {
-                payment,
+                payment: payment.clone(),
                 attributes,
             };
 
@@ -98,7 +98,7 @@ pub fn merge_wrapped_farm_tokens<M: CallTypeApi + StorageMapperApi>(
     wrapped_farm_token_mapper: &NonFungibleTokenMapper<M>,
     mut wrapped_farm_tokens: ManagedVec<M, WrappedFarmToken<M>>,
 ) -> WrappedFarmToken<M> {
-    let first_item = wrapped_farm_tokens.get(0);
+    let first_item = wrapped_farm_tokens.get(0).clone();
     wrapped_farm_tokens.remove(0);
 
     let first_token_attributes = first_item.attributes.into_part(&first_item.payment.amount);
@@ -107,7 +107,7 @@ pub fn merge_wrapped_farm_tokens<M: CallTypeApi + StorageMapperApi>(
         ManagedVec::from_single_item(first_token_attributes.farm_token.clone());
     let mut farming_tokens_to_merge =
         ManagedVec::from_single_item(first_token_attributes.proxy_farming_token.clone());
-    for wrapped_farm in &wrapped_farm_tokens {
+    for wrapped_farm in wrapped_farm_tokens {
         let attributes = wrapped_farm
             .attributes
             .into_part(&wrapped_farm.payment.amount);

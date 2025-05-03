@@ -26,6 +26,7 @@ pub trait TokenMergeHelperModule {
         let mut weight_sum = BigUint::zero();
         let mut elem_weight_sum = BigUint::zero();
         for item in &dataset {
+            let item = item.clone();
             weight_sum += &item.weight;
             elem_weight_sum += item.value * item.weight;
         }

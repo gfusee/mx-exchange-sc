@@ -3,7 +3,8 @@ use fixed_supply_token::FixedSupplyToken;
 multiversx_sc::imports!();
 multiversx_sc::derive_imports!();
 
-#[derive(TypeAbi, TopEncode, TopDecode, Clone, PartialEq, Debug)]
+#[type_abi]
+#[derive(TopEncode, TopDecode, Clone, PartialEq, Debug)]
 pub struct DualYieldTokenAttributes<M: ManagedTypeApi> {
     pub lp_farm_token_nonce: u64,
     pub lp_farm_token_amount: BigUint<M>,
@@ -47,7 +48,7 @@ pub trait DualYieldTokenModule:
         token_ticker: ManagedBuffer,
         num_decimals: usize,
     ) {
-        let register_cost = self.call_value().egld_value().clone_value();
+        let register_cost = self.call_value().egld().clone_value();
         self.dual_yield_token().issue_and_set_all_roles(
             EsdtTokenType::Meta,
             register_cost,

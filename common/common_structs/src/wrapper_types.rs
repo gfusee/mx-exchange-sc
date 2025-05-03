@@ -8,7 +8,8 @@ use unwrappable::Unwrappable;
 static NOT_ENOUGH_RESULTS_ERR_MSG: &[u8] = b"Not enough results";
 const FIRST_VEC_INDEX: usize = 0;
 
-#[derive(TopEncode, TopDecode, NestedEncode, NestedDecode, PartialEq, TypeAbi, Eq)]
+#[type_abi]
+#[derive(TopEncode, TopDecode, NestedEncode, NestedDecode, PartialEq, Eq)]
 pub struct TokenPair<M: ManagedTypeApi> {
     pub first_token: TokenIdentifier<M>,
     pub second_token: TokenIdentifier<M>,
@@ -20,7 +21,8 @@ impl<M: ManagedTypeApi> TokenPair<M> {
     }
 }
 
-#[derive(TopEncode, TopDecode, NestedEncode, NestedDecode, TypeAbi)]
+#[type_abi]
+#[derive(TopEncode, TopDecode, NestedEncode, NestedDecode)]
 pub struct NonceAmountPair<M: ManagedTypeApi> {
     pub nonce: u64,
     pub amount: BigUint<M>,
@@ -33,8 +35,9 @@ impl<M: ManagedTypeApi> NonceAmountPair<M> {
     }
 }
 
+#[type_abi]
 #[derive(
-    TypeAbi, TopEncode, TopDecode, NestedEncode, NestedDecode, ManagedVecItem, Clone, Debug,
+    TopEncode, TopDecode, NestedEncode, NestedDecode, ManagedVecItem, Clone, Debug,
 )]
 pub struct EpochAmountPair<M: ManagedTypeApi> {
     pub epoch: u64,

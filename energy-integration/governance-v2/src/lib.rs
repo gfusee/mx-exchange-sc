@@ -92,7 +92,7 @@ pub trait GovernanceV2:
         let min_energy_for_propose = self.min_energy_for_propose().get();
         require!(user_energy >= min_energy_for_propose, NOT_ENOUGH_ENERGY);
 
-        let user_fee = self.call_value().single_esdt();
+        let user_fee = self.call_value().single_esdt().clone();
         require!(
             self.fee_token_id().get() == user_fee.token_identifier,
             WRONG_TOKEN_ID

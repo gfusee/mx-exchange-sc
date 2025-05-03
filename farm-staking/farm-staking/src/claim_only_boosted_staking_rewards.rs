@@ -67,7 +67,7 @@ pub trait ClaimOnlyBoostedStakingRewardsModule:
         let farm_token_mapper = self.farm_token();
         let farm_token_id = farm_token_mapper.get_token_id();
         let mut migrated_amount = BigUint::zero();
-        for farm_position in &payments {
+        for farm_position in payments {
             if farm_position.token_identifier == farm_token_id
                 && self.is_old_farm_position(farm_position.token_nonce)
             {

@@ -9,7 +9,8 @@ use super::common_result_types::{SwapTokensFixedInputResultType, SwapTokensFixed
 multiversx_sc::imports!();
 multiversx_sc::derive_imports!();
 
-#[derive(TypeAbi, TopEncode, TopDecode, NestedEncode, NestedDecode, Clone, Copy)]
+#[type_abi]
+#[derive(TopEncode, TopDecode, NestedEncode, NestedDecode, Clone, Copy)]
 pub enum SwapType {
     FixedInput,
     FixedOutput,
@@ -38,7 +39,7 @@ pub trait SwapModule:
         require!(self.whitelist().contains(&caller), ERROR_NOT_WHITELISTED);
 
         let mut storage_cache = StorageCache::new(self);
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         let swap_tokens_order =
             storage_cache.get_swap_tokens_order(&payment.token_identifier, &token_out);
 
@@ -100,7 +101,7 @@ pub trait SwapModule:
         require!(amount_out_min > 0, ERROR_INVALID_ARGS);
 
         let mut storage_cache = StorageCache::new(self);
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         let swap_tokens_order =
             storage_cache.get_swap_tokens_order(&payment.token_identifier, &token_out);
 
@@ -172,7 +173,7 @@ pub trait SwapModule:
         require!(amount_out > 0, ERROR_INVALID_ARGS);
 
         let mut storage_cache = StorageCache::new(self);
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         let swap_tokens_order =
             storage_cache.get_swap_tokens_order(&payment.token_identifier, &token_out);
 

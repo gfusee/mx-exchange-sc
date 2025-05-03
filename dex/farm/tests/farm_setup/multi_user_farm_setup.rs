@@ -6,7 +6,6 @@ use config::ConfigModule;
 use farm::external_interaction::ExternalInteractionsModule;
 use multiversx_sc::codec::multi_types::OptionalValue;
 use multiversx_sc::{
-    storage::mappers::StorageTokenWrapper,
     types::{Address, BigInt, EsdtLocalRole, MultiValueEncoded},
 };
 use multiversx_sc_scenario::whitebox_legacy::TxTokenTransfer;

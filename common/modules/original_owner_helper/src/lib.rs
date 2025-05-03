@@ -10,7 +10,7 @@ pub trait OriginalOwnerHelperModule {
         &self,
         farm_token_mapper: &NonFungibleTokenMapper,
     ) -> ManagedAddress {
-        let payments = self.call_value().all_esdt_transfers();
+        let payments = self.call_value().all_esdt_transfers().clone();
         let farm_token_id = farm_token_mapper.get_token_id();
 
         let mut opt_original_owner = None;

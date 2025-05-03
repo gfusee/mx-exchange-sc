@@ -110,7 +110,7 @@ pub trait FarmBoostedYieldsModule:
 
         let mut total = BigUint::zero();
         for rew in &rewards {
-            total += rew.amount;
+            total += rew.amount.clone();
         }
 
         total
@@ -227,7 +227,7 @@ where
                 .signal_error(b"Invalid boosted yields rewards");
         }
 
-        let weekly_reward = total_rewards.get(0);
+        let weekly_reward = total_rewards.get(0).clone();
         if weekly_reward.amount == 0 {
             return user_rewards;
         }
@@ -256,7 +256,7 @@ where
                 .update(|amount| *amount -= &user_reward);
 
             user_rewards.push(EsdtTokenPayment::new(
-                weekly_reward.token_identifier,
+                weekly_reward.token_identifier.clone(),
                 0,
                 user_reward,
             ));

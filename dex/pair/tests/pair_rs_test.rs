@@ -12,7 +12,6 @@ use multiversx_sc::{
         multi_types::OptionalValue,
         top_encode_to_vec_u8,
     },
-    storage::mappers::StorageTokenWrapper,
     types::{BigUint, EsdtLocalRole, MultiValueEncoded},
 };
 use multiversx_sc_scenario::{
@@ -131,7 +130,7 @@ fn test_safe_price_observation_decoding() {
 
             new_observation.lp_supply_accumulated = managed_biguint!(2u64);
             sc.price_observations().push(&new_observation.clone());
-            let final_observation = sc.price_observations().get(1);
+            let final_observation = sc.price_observations().get(1).clone();
             assert_eq!(
                 new_observation.lp_supply_accumulated,
                 final_observation.lp_supply_accumulated

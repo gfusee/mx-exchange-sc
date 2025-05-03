@@ -38,7 +38,7 @@ pub trait RemoveLiquidityModule:
 
         let mut storage_cache = StorageCache::new(self);
         let caller = self.blockchain().get_caller();
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
 
         require!(
             self.is_state_active(storage_cache.contract_state),
@@ -85,8 +85,8 @@ pub trait RemoveLiquidityModule:
         let output_payments =
             self.build_remove_liq_output_payments(&storage_cache, &remove_liq_context);
 
-        let first_payment_after = output_payments.get(0);
-        let second_payment_after = output_payments.get(1);
+        let first_payment_after = output_payments.get(0).clone();
+        let second_payment_after = output_payments.get(1).clone();
         require!(
             first_payment_after.amount >= remove_liq_context.first_token_amount_min,
             ERROR_SLIPPAGE_ON_REMOVE
@@ -108,7 +108,7 @@ pub trait RemoveLiquidityModule:
     fn remove_liquidity_and_burn_token(&self, token_to_buyback_and_burn: TokenIdentifier) {
         let mut storage_cache = StorageCache::new(self);
         let caller = self.blockchain().get_caller();
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
 
         require!(self.whitelist().contains(&caller), ERROR_NOT_WHITELISTED);
         require!(

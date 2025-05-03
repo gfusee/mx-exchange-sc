@@ -33,7 +33,7 @@ pub trait ProxyStakeModule:
         original_caller: ManagedAddress,
         payments: ManagedVec<EsdtTokenPayment>,
     ) -> StakeProxyResult<Self::Api> {
-        let lp_farm_token_payment = payments.get(0);
+        let lp_farm_token_payment = payments.get(0).clone();
         let additional_payments = payments.slice(1, payments.len()).unwrap_or_default();
 
         let lp_farm_token_id = self.lp_farm_token_id().get();

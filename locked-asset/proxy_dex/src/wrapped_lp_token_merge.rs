@@ -69,6 +69,7 @@ pub trait WrappedLpTokenMerge:
     ) -> WrappedLpToken<Self::Api> {
         let locked_token_id = wrapped_lp_tokens
             .get(0)
+            .clone()
             .attributes
             .locked_tokens
             .token_identifier;

@@ -99,13 +99,13 @@ pub trait FeesCollector:
         let mut len = rewards.len();
         let mut total_locked_token_rewards_amount = BigUint::zero();
         while i < len {
-            let rew = rewards.get(i);
+            let rew = rewards.get(i).clone();
             if rew.token_identifier != locked_token_id {
                 i += 1;
                 continue;
             }
 
-            total_locked_token_rewards_amount += rew.amount;
+            total_locked_token_rewards_amount += rew.amount.clone();
             len -= 1;
             rewards.remove(i);
         }
@@ -160,7 +160,7 @@ where
     ) -> PaymentsVec<<Self::WeeklyRewardsSplittingMod as ContractBase>::Api> {
         let mut results = ManagedVec::new();
         let all_tokens = sc.all_tokens().get();
-        for token in &all_tokens {
+        for token in all_tokens {
             let opt_accumulated_fees = sc.get_and_clear_accumulated_fees(week, &token);
             if let Some(accumulated_fees) = opt_accumulated_fees {
                 results.push(EsdtTokenPayment::new(token, 0, accumulated_fees));

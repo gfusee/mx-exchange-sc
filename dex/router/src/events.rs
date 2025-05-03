@@ -1,7 +1,8 @@
 multiversx_sc::imports!();
 multiversx_sc::derive_imports!();
 
-#[derive(TypeAbi, TopEncode)]
+#[type_abi]
+#[derive(TopEncode)]
 pub struct CreatePairEvent<M: ManagedTypeApi> {
     caller: ManagedAddress<M>,
     first_token_id: TokenIdentifier<M>,
@@ -14,7 +15,8 @@ pub struct CreatePairEvent<M: ManagedTypeApi> {
     timestamp: u64,
 }
 
-#[derive(TypeAbi, TopEncode)]
+#[type_abi]
+#[derive(TopEncode)]
 pub struct UserPairSwapEnabledEvent<M: ManagedTypeApi> {
     caller: ManagedAddress<M>,
     first_token_id: TokenIdentifier<M>,
@@ -22,7 +24,8 @@ pub struct UserPairSwapEnabledEvent<M: ManagedTypeApi> {
     pair_address: ManagedAddress<M>,
 }
 
-#[derive(TypeAbi, TopEncode)]
+#[type_abi]
+#[derive(TopEncode)]
 pub struct MultiPairSwapEvent<M: ManagedTypeApi> {
     caller: ManagedAddress<M>,
     token_in: TokenIdentifier<M>,
@@ -103,7 +106,7 @@ pub trait EventsModule {
         let epoch = self.blockchain().get_block_epoch();
         let timestamp = self.blockchain().get_block_timestamp();
         let last_payment_index = payments_out.len() - 1;
-        let token_out = payments_out.get(last_payment_index);
+        let token_out = payments_out.get(last_payment_index).clone();
         self.multi_pair_swap_event(
             caller.clone(),
             token_in.clone(),

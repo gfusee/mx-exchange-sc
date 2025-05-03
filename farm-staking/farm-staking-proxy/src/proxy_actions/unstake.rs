@@ -25,7 +25,7 @@ pub trait ProxyUnstakeModule:
     ) -> UnstakeResult<Self::Api> {
         let caller = self.blockchain().get_caller();
         let orig_caller = self.get_orig_caller_from_opt(&caller, opt_orig_caller);
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         let dual_yield_token_mapper = self.dual_yield_token();
         dual_yield_token_mapper.require_same_token(&payment.token_identifier);
 

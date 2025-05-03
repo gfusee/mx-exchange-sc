@@ -40,7 +40,7 @@ pub trait UnlockWithPenaltyModule:
     fn unlock_early(&self) {
         self.require_not_paused();
         let caller = self.blockchain().get_caller();
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         let reduce_result = self.reduce_lock_period_common(&caller, payment.clone(), None);
 
         let unlocked_tokens = self.to_esdt_payment(reduce_result.unlocked_tokens);
@@ -51,7 +51,7 @@ pub trait UnlockWithPenaltyModule:
         );
 
         self.set_energy_entry(&caller, reduce_result.energy);
-        self.unstake_tokens(caller, payment, unlocked_tokens);
+        self.unstake_tokens(caller, payment.clone(), unlocked_tokens);
     }
 
     /// Reduce the locking period of a locked token. This incures a penalty.
@@ -64,7 +64,7 @@ pub trait UnlockWithPenaltyModule:
         self.require_is_listed_lock_option(new_lock_period);
 
         let caller = self.blockchain().get_caller();
-        let payment = self.call_value().single_esdt();
+        let payment = self.call_value().single_esdt().clone();
         let reduce_result =
             self.reduce_lock_period_common(&caller, payment.clone(), Some(new_lock_period));
 
